@@ -112,7 +112,7 @@
     <ClCompile Include="Vendors\ImGui\imgui_tables.cpp" />
     <ClCompile Include="Vendors\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Vendors\stb\stb_impl.cpp" />
-    <ClCompile Include="Window.Pokemon.cpp" />
+    <ClCompile Include="GUI\Window.Pokemon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vendors\glew\include\GL\glew.h" />

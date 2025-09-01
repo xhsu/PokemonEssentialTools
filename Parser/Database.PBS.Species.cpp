@@ -38,6 +38,7 @@ import Database.Raw.PBS;
 
 
 
+// #UPDATE_AT_CPP26 reflecion
 template <auto FirstEnumValue, auto... RestEnumValues>
 [[nodiscard]] constexpr auto EnumDeserialize(std::string_view sz) noexcept// -> std::optional<decltype(FirstEnumValue)>
 {
