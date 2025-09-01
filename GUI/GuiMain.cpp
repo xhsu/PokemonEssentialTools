@@ -31,6 +31,7 @@ import Game.Tilesets;
 import Game.Path;
 import Database.Raw.PBS;
 import Database.RX;
+import Database.PBS;
 
 
 
@@ -104,6 +105,7 @@ namespace Window
 	extern void MapList() noexcept;
 	extern void MapDisplay() noexcept;
 	extern void TypeInfo() noexcept;
+	extern void Pokemons() noexcept;
 }
 
 // Main code
@@ -121,7 +123,7 @@ int main(int argc, char* argv[]) noexcept
 		std::println("Default game path is used: '{}'", PokemonEssentials::GamePath.u8string());
 	}
 
-	std::jthread thread_LoadPBS{ [] static noexcept { PBS::Load(PokemonEssentials::GamePath); } },
+	std::jthread thread_LoadPBS{ [] static noexcept { PBS::Load(PokemonEssentials::GamePath); Database::PBS::Build(); } },
 		thread_LoadRxData{ [] static noexcept { Database::RX::Load(PokemonEssentials::GamePath); } };
 
 	glfwSetErrorCallback(
@@ -250,6 +252,7 @@ int main(int argc, char* argv[]) noexcept
 		Window::AutoTiles();
 		Window::MapList();
 		Window::MapDisplay();
+		Window::Pokemons();
 
 		// Rendering
 		ImGui::Render();

@@ -29,18 +29,27 @@ Database.PBS.<Name> - Reorganized data from PBS txt files. - NO GL INVOLVED!
 import std.compat;
 #endif
 
+import Database.PBS;
 import Database.RX;
 import Database.Raw.PBS;
 
 import Game.Path;
 
-namespace Database::PBS
-{
-	extern void Build() noexcept;
-}
 
 int main(int argc, char* argv[]) noexcept
 {
+	if (argc == 2)
+	{
+		std::filesystem::path Candidate{ argv[1] };
+
+		if (std::filesystem::exists(Candidate) && std::filesystem::is_directory(Candidate))
+			PokemonEssentials::AssignGamePath(std::move(Candidate));
+	}
+	else
+	{
+		std::println("Default game path is used: '{}'", PokemonEssentials::GamePath.u8string());
+	}
+
 	std::jthread thread_LoadRxData{ [] static noexcept { Database::RX::Load(PokemonEssentials::GamePath); } };
 	PBS::Load(PokemonEssentials::GamePath);
 	thread_LoadRxData.join();

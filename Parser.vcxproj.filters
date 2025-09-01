@@ -42,5 +42,8 @@
     <ClCompile Include="Parser\Database.PBS.Species.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Parser\Database.PBS.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

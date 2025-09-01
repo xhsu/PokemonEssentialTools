@@ -20,6 +20,7 @@ struct IniBlock
 	std::string m_Id{};
 	std::string m_Comment{};
 	std::map<std::string, std::string, sv_less_t> m_KeyValues{};
+	std::uint32_t m_IndexNum{};
 
 	template <typename R = std::ranges::empty_view<decltype(IniBlock::m_KeyValues)::mapped_type>>
 	auto EjectArr(auto&& a, R&& def = {}, const char* delim = ", \t") && noexcept -> std::vector<decltype(IniBlock::m_KeyValues)::mapped_type>
@@ -131,7 +132,14 @@ struct IniFile
 				continue;
 
 			if (szLine.starts_with('[') && szLine.ends_with(']'))
-				ret.m_Entries.emplace_back(std::string{ szLine.substr(1, szLine.length() - 2) });
+			{
+				ret.m_Entries.push_back(
+					IniBlock{
+						.m_Id = std::string{ szLine.substr(1, szLine.length() - 2) },
+						.m_IndexNum{ (decltype(IniBlock::m_IndexNum))ret.m_Entries.size() },
+					}
+				);
+			}
 
 			if (auto pos = szLine.find_first_of('='); pos != szLine.npos)
 			{
@@ -577,13 +585,18 @@ export struct PokemonSpecies
 	std::vector<PokemonEvolution> m_Evolutions{};
 	[[nodiscard]] auto Evolutions() const noexcept -> std::generator<PokemonSpecies*>;
 
+	// Extra, dont serialize these
+
+	decltype(IniBlock::m_IndexNum) m_NationalDex{};
+
 	PokemonSpecies(IniBlock&& src) noexcept
 		: READ_STR(Name, "Unnamed"), READ_STR(FormName, ""), READ_ARRDEF(Types, "NORMAL"), READ_VEC(BaseStats, 1, 1, 1, 1, 1, 1),
 		READ_NUM(BaseExp, 100), READ_NUM(CatchRate, 255), READ_NUM(Happiness, 70), READ_NUM(HatchSteps, 1), READ_NUM(Generation, 0),
 		READ_STR(GenderRatio, "Female50Percent"), READ_STR(GrowthRate, "Medium"), READ_ARR(Abilities), READ_ARR(HiddenAbilities),
 		READ_ARR(TutorMoves), READ_ARR(EggMoves), READ_ARRDEF(EggGroups, "Undiscovered"), READ_STR(Incense, ""), READ_ARR(Offspring),
 		READ_NUM(Height, .1f), READ_NUM(Weight, .1f), READ_STR(Color, "Red"), READ_STR(Shape, "Head"), READ_STR(Habitat, "None"), READ_STR(Category, "???"), READ_STR(Pokedex, "???"),
-		READ_ARR(Flags), READ_STR(WildItemCommon, ""), READ_STR(WildItemUncommon, ""), READ_STR(WildItemRare, "")
+		READ_ARR(Flags), READ_STR(WildItemCommon, ""), READ_STR(WildItemUncommon, ""), READ_STR(WildItemRare, ""),
+		m_NationalDex{ src.m_IndexNum + 1 }
 	{
 		std::ignore = std::move(src).EjectTuple<2>(
 			"EVs",
@@ -633,7 +646,7 @@ export struct PokemonSpecies
 		READ_STR_B(GenderRatio), READ_STR_B(GrowthRate), READ_ARR_B(Abilities), READ_ARR_B(HiddenAbilities),
 		READ_ARR_B(TutorMoves), READ_ARR_B(EggMoves), READ_ARR_B(EggGroups), READ_STR_B(Incense), READ_ARR_B(Offspring),
 		READ_NUM_B(Height), READ_NUM_B(Weight), READ_STR_B(Color), READ_STR_B(Shape), READ_STR_B(Habitat), READ_STR_B(Category), READ_STR_B(Pokedex),
-		READ_ARR_B(Flags), READ_STR_B(WildItemCommon), READ_STR_B(WildItemUncommon), READ_STR_B(WildItemRare)
+		READ_ARR_B(Flags), READ_STR_B(WildItemCommon), READ_STR_B(WildItemUncommon), READ_STR_B(WildItemRare), m_NationalDex{ base.m_NationalDex }
 	{
 		std::ignore = std::move(src).EjectTuple<2>(
 			"EVs",

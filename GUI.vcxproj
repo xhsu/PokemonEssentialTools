@@ -98,6 +98,7 @@
     <ClCompile Include="GUI\Window.Map.cpp" />
     <ClCompile Include="GUI\Window.Test.cpp" />
     <ClCompile Include="GUI\Window.Type.cpp" />
+    <ClCompile Include="Parser\Database.PBS.ixx" />
     <ClCompile Include="Parser\Database.PBS.Species.cpp" />
     <ClCompile Include="Parser\Database.Raw.PBS.ixx" />
     <ClCompile Include="Parser\Database.RX.ixx" />
@@ -111,6 +112,7 @@
     <ClCompile Include="Vendors\ImGui\imgui_tables.cpp" />
     <ClCompile Include="Vendors\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Vendors\stb\stb_impl.cpp" />
+    <ClCompile Include="Window.Pokemon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vendors\glew\include\GL\glew.h" />
